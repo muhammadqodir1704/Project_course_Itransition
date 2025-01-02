@@ -5,7 +5,7 @@ import { FormProvider } from "./context/FormContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyForms from "./components/MyForms";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
