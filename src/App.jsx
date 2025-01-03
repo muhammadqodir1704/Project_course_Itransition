@@ -5,14 +5,16 @@ import { FormProvider } from "./context/FormContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyForms from "./components/MyForms";
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+// const login =
 function App() {
+
   return (
     <FormProvider>
       <Router>
@@ -29,10 +31,7 @@ function App() {
                   </h1>
                 }
               />
-              <Route
-                path="/login"
-                element={<Login supabase={supabase} />}
-              />
+              <Route path="/login" element={<Login supabase={supabase} />} />
               <Route
                 path="/register"
                 element={<Register supabase={supabase} />}

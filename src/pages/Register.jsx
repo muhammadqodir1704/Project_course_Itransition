@@ -5,7 +5,7 @@ const Register = ({ supabase }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -24,10 +24,10 @@ const Register = ({ supabase }) => {
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
-        setErrorMessage(error.message); 
+        setErrorMessage(error.message);
       } else {
         console.log("Registered successfully!");
-        navigate("/login"); 
+        navigate("/login");
       }
     } catch (err) {
       console.error("Unexpected error:", err);
@@ -35,6 +35,12 @@ const Register = ({ supabase }) => {
     }
   };
 
+  const login = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'github'
+    });
+  };
+  
   return (
     <div className="font-[sans-serif]">
       <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
@@ -61,7 +67,7 @@ const Register = ({ supabase }) => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
                     placeholder="Enter email"
-                    required 
+                    required
                   />
                 </div>
                 <div>
@@ -75,8 +81,8 @@ const Register = ({ supabase }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
                     placeholder="Enter password"
-                    required 
-                    minLength="6" 
+                    required
+                    minLength="6"
                   />
                 </div>
                 <div>
@@ -102,6 +108,7 @@ const Register = ({ supabase }) => {
                     className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     required
                   />
+
                   <label
                     htmlFor="remember-me"
                     className="text-gray-800 ml-3 block text-sm"
@@ -120,6 +127,9 @@ const Register = ({ supabase }) => {
                   className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                 >
                   Create an account
+                </button >
+                <button onClick={login} className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md hover:text-white  hover:bg-blue-300 focus:outline-none mt-4">
+                  Continue with GitHub
                 </button>
               </div>
               <p className="text-gray-800 text-sm mt-6 text-center">
