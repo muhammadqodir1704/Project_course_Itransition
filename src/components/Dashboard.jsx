@@ -41,6 +41,7 @@ const Dashboard = () => {
       return;
     }
 
+    console.log("Form is valid, saving...");
     saveForm();
   };
 
@@ -122,7 +123,7 @@ const Dashboard = () => {
               onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
               className="border-b-2 focus:outline-none w-full mb-4 text-gray-800"
             />
-            
+
             <input
               type="text"
               placeholder="Enter image URL..."
@@ -134,7 +135,7 @@ const Dashboard = () => {
               }}
               className="border px-4 py-2 rounded w-full mb-4"
             />
-            
+
             {question.image && (
               <img
                 src={question.image}

@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-
+import { insertData, updateData, deleteData } from "../helper/supabaseClient";
 export const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
@@ -7,6 +7,10 @@ export const FormProvider = ({ children }) => {
     const [formDescription, setFormDescription] = useState("");
     const [questions, setQuestions] = useState([]);
     const [savedForms, setSavedForms] = useState([]);
+    const insertForm = async (data) => await insertData("forms", data);
+    const updateForm = async (id, data) => await updateData("forms", id, data);
+    const removeForm = async (id) => await deleteData("forms", id);
+
 
     const addQuestion = () => {
         setQuestions([...questions, { text: "", options: [""] }]);
@@ -60,31 +64,52 @@ export const FormProvider = ({ children }) => {
         return true;
     };
 
-    const saveForm = () => {
+    const saveForm = async () => {
         if (validateForm()) {
-            const newForm = { formName, formDescription, questions };
-            setSavedForms([...savedForms, newForm]); // Saqlangan formalarni yangilash
-            setFormName("");
-            setFormDescription("");
-            setQuestions([]);
+            const newForm = {
+                formName,
+                formDescription,
+                questions,
+            };
+
+            try {
+                const result = await insertData("form_templates", newForm);
+                console.log("Form saved to Supabase:", result);
+
+                setSavedForms([...savedForms, newForm]);
+
+                // Formalarni tozalash
+                setFormName("");
+                setFormDescription("");
+                setQuestions([]);
+            } catch (error) {
+                console.error("Error saving form:", error);  
+                if (error.message) {
+                    alert("Error: " + error.message); 
+                } else {
+                    alert("Unknown error occurred while saving form.");
+                }
+            }
         }
     };
+
+
     const renameForm = (index) => {
         const newName = prompt("Enter a new name for the form:");
         if (newName) {
-          const updatedForms = [...savedForms];
-          updatedForms[index].formName = newName;
-          setSavedForms(updatedForms);
+            const updatedForms = [...savedForms];
+            updatedForms[index].formName = newName;
+            setSavedForms(updatedForms);
         }
-      };
-      
-      const deleteForm = (index) => {
+    };
+
+    const deleteForm = (index) => {
         if (window.confirm("Are you sure you want to delete this form?")) {
-          const updatedForms = savedForms.filter((_, i) => i !== index);
-          setSavedForms(updatedForms);
+            const updatedForms = savedForms.filter((_, i) => i !== index);
+            setSavedForms(updatedForms);
         }
-      };
-      
+    };
+
     return (
         <FormContext.Provider
             value={{
@@ -105,6 +130,9 @@ export const FormProvider = ({ children }) => {
                 setSavedForms,
                 renameForm,
                 deleteForm,
+                insertForm,
+                updateForm,
+                removeForm,
             }}
         >
             {children}
